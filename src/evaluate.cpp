@@ -255,7 +255,6 @@ namespace {
   constexpr Score BishopPawns         = S(  3,  7);
   constexpr Score BishopXRayPawns     = S(  4,  5);
   constexpr Score CorneredBishop      = S( 50, 50);
-  constexpr Score TwoBishopsPassedPawn= S( 14, 36);
   constexpr Score FlankAttacks        = S(  8,  0);
   constexpr Score Hanging             = S( 69, 36);
   constexpr Score KnightOnQueen       = S( 16, 11);
@@ -794,15 +793,16 @@ namespace {
 
                 bonus += make_score(k * w, k * w);
             }
+            
+            // Bishop pair and passed pawns - a strong combination.
+            if(pos.count<BISHOP>(Us) > 1)
+            {
+                bonus += make_score(2 * w, 6 * w);
+            }
         } // r > RANK_3
 
         score += bonus - PassedFile * edge_distance(file_of(s));
         
-        // Bishop pair and passed pawns - a strong combination.
-        if(pos.count<BISHOP>(Us) > 1)
-        {
-            score += TwoBishopsPassedPawn;
-        }
     }
 
     if (T)
